@@ -7,6 +7,7 @@ from openai.types.responses import ResponseOutputMessage
 
 async_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+
 async def main():
     """Hello world example of agentic system."""
     input_text = "What is the capital of France?"
@@ -28,7 +29,7 @@ async def main():
             ),
             instructions="You are a helpful assistant.",
         )
-        
+
         logger.info(f"Response: {response}")
         breakpoint()
 
@@ -41,10 +42,10 @@ async def main():
                     agent_should_stop = True
                 else:
                     logger.warning(f"Unsupported output type: {output.content[0]}")
-                
+
             else:
                 current_iteration += 1
-        
+
         if agent_should_stop:
             break
 

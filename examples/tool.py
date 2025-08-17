@@ -13,10 +13,11 @@ from openai.types.responses import (
     ResponseFunctionToolCall,
     ResponseFunctionToolCallParam,
     ResponseReasoningItem,
+    EasyInputMessage,
 )
 
-from openai.types.responses.response_input_item_param import Message
 from openai.types.responses.response_input_item_param import FunctionCallOutput
+from pydantic import BaseModel
 
 from src.tool import ToolManager
 
@@ -38,10 +39,17 @@ def function_tool(
     return tool_manager.register_function(func, name, description, strict)
 
 
+class Weather(BaseModel):
+    city: str
+    temperature_range: str
+    conditions: str
+
+
 @function_tool
-def get_weather(city: str) -> str:
-    """Get the weather of a city."""
-    return f"The weather of {city} is sunny."
+def get_weather(city: str) -> Weather:
+    """Get the current weather information for a specified city."""
+    print("[debug] get_weather called")
+    return Weather(city=city, temperature_range="14-20C", conditions="Sunny with wind.")
 
 
 async def main():
@@ -49,7 +57,9 @@ async def main():
 
     input_message = "What is weather in Kathmandu?"
 
-    prepared_input = [Message(content=input_message, role="user", type="message")]
+    prepared_input = [
+        EasyInputMessage(content=input_message, role="user", type="message")
+    ]
 
     # test decorator
     print(get_weather)
