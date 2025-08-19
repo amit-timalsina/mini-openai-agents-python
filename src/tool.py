@@ -83,7 +83,7 @@ class ToolManager:
 
         args = json.loads(arguments)
         func = self._functions[name]
-        return func(**args)
+        return json.dumps(func(**args))
 
     @property
     def tools(self) -> list[FunctionTool]:
