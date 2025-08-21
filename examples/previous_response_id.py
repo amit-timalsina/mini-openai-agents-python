@@ -10,8 +10,6 @@ you'll need to re-send the previous conversation history.
 
 import asyncio
 import logging
-from openai import AsyncOpenAI
-import os
 from openai.types.responses.response_input_param import ResponseInputParam
 from openai.types.responses.response_input_text_param import ResponseInputTextParam
 from openai.types.responses.response_input_param import Message
@@ -20,8 +18,6 @@ from src.orchestrator import run
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
-
-async_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 async def main() -> None:
@@ -38,7 +34,7 @@ async def main() -> None:
         )
     ]
 
-    response = await run(prepared_input)
+    response, _ = await run(prepared_input)
     logger.info(f"First response: {response}")
 
     previous_response_id = response.id
@@ -52,7 +48,7 @@ async def main() -> None:
             ],
         )
     ]
-    response = await run(prepared_input, previous_response_id)
+    response, _ = await run(prepared_input, previous_response_id)
     logger.info(f"Second response: {response}")
 
 
