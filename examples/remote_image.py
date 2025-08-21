@@ -1,5 +1,5 @@
 """
-This example shows how to use the OpenAI SDK to provide remote pdf file and use it as a context for a chat.
+This example shows how to use the OpenAI SDK to provide remote image and use it as a context for a chat.
 """
 
 import asyncio
@@ -8,7 +8,7 @@ import logging
 from openai import AsyncOpenAI
 from openai.types import Reasoning
 from openai.types.responses.response_input_param import ResponseInputParam, Message
-from openai.types.responses.response_input_file_param import ResponseInputFileParam
+from openai.types.responses.response_input_image_param import ResponseInputImageParam
 from openai.types.responses.response_input_text_param import ResponseInputTextParam
 from openai.types.responses import (
     ResponseOutputMessage,
@@ -24,18 +24,21 @@ async_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 async def main() -> None:
     """
-    Main function to provide remote pdf file and use it as a context for a chat.
+    Main function to provide remote image and use it as a context for a chat.
     """
 
-    file_url = "https://www.berkshirehathaway.com/letters/2024ltr.pdf"
+    image_url = (
+        "https://upload.wikimedia.org/wikipedia/commons/0/0c/GoldenGateBridge-001.jpg"
+    )
 
     prepared_input: ResponseInputParam = [
         Message(
             role="user",
             content=[
-                ResponseInputFileParam(
-                    type="input_file",
-                    file_url=file_url,
+                ResponseInputImageParam(
+                    type="input_image",
+                    detail="auto",
+                    image_url=image_url,
                 )
             ],
         ),
@@ -43,7 +46,7 @@ async def main() -> None:
             role="user",
             content=[
                 ResponseInputTextParam(
-                    type="input_text", text="Can you summarize the letter?"
+                    type="input_text", text="What do you see in the image?"
                 )
             ],
         ),
